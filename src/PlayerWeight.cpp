@@ -43,9 +43,12 @@ int PlayerMainWindow::openImage() {
     }
 
     QPixmap pixmap(QPixmap::fromImage(*pChordsImage_));
-    pixmap.scaled(QSize(ui->label->width(),ui->label->height()),Qt::KeepAspectRatioByExpanding);
-    // ui->label->resize(pChordsImage_->width(),pChordsImage_->height());
+    // pixmap.scaled(QSize(ui->label->width(),ui->label->height()),Qt::KeepAspectRatioByExpanding);
+    ui->scrollAreaWidgetContents->setMinimumSize(QSize(400, 400));
     ui->label->setPixmap(pixmap);
+    ui->label->resize(pChordsImage_->width(),pChordsImage_->height());
+    ui->scrollArea->resize(pChordsImage_->width()+5, pChordsImage_->height()+5);
+
     std::cout << "ui set success! 3333333" << std::endl;
 
     return true;

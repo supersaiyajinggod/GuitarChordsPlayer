@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>985</width>
-    <height>799</height>
+    <width>770</width>
+    <height>609</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,17 +23,20 @@
    <widget class="QScrollArea" name="scrollArea">
     <property name="geometry">
      <rect>
-      <x>60</x>
-      <y>60</y>
-      <width>881</width>
-      <height>601</height>
+      <x>30</x>
+      <y>10</y>
+      <width>701</width>
+      <height>541</height>
      </rect>
     </property>
-    <property name="minimumSize">
-     <size>
-      <width>400</width>
-      <height>400</height>
-     </size>
+    <property name="verticalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOn</enum>
+    </property>
+    <property name="horizontalScrollBarPolicy">
+     <enum>Qt::ScrollBarAsNeeded</enum>
+    </property>
+    <property name="sizeAdjustPolicy">
+     <enum>QAbstractScrollArea::AdjustToContents</enum>
     </property>
     <property name="widgetResizable">
      <bool>true</bool>
@@ -43,23 +46,17 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>879</width>
-       <height>599</height>
+       <width>685</width>
+       <height>539</height>
       </rect>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>400</width>
-       <height>400</height>
-      </size>
      </property>
      <widget class="QLabel" name="label">
       <property name="geometry">
        <rect>
-        <x>250</x>
-        <y>60</y>
-        <width>381</width>
-        <height>451</height>
+        <x>0</x>
+        <y>0</y>
+        <width>91</width>
+        <height>81</height>
        </rect>
       </property>
       <property name="text">
@@ -74,7 +71,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>985</width>
+     <width>770</width>
      <height>22</height>
     </rect>
    </property>
