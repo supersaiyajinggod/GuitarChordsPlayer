@@ -6,6 +6,7 @@
 #include "ui_gui.h"
 
 #include <QMainWindow>
+#include <QTimer>
  
 namespace Ui {
     class MainWindow;
@@ -22,9 +23,12 @@ public:
 private:
     Ui::MainWindow *ui;
     QString chordsPath_;
-    QImage* pChordsImage_ = nullptr;
+    QImage * pChordsImage_ = nullptr;
+    QTimer * pTimer = nullptr;
 
-    int openImage();
+    bool openImage();
+
+    int i_ = 0;
  
 private slots:
     void openFile();

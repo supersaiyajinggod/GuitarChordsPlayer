@@ -2,13 +2,20 @@
 
 #include <QtWidgets/qfiledialog.h>
 #include <QMessageBox>
+#include <QAbstractScrollArea>
+#include <QScrollBar>
 
 #include "PlayerWeight.h"
 
 
 PlayerMainWindow::PlayerMainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
+    pTimer = new QTimer(this);
+
     connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(openFile()));
+    connect(pTimer, &QTimer::timeout, [&](){
+        ui->scrollArea->verticalScrollBar()->setValue(++i_ > 0 ? i_ : 0);
+    });
 }
  
 PlayerMainWindow::~PlayerMainWindow()
@@ -18,38 +25,48 @@ PlayerMainWindow::~PlayerMainWindow()
 
 void PlayerMainWindow::openFile() {
     chordsPath_ = QFileDialog::getOpenFileName(
-        this, ("Open Chords File"), QDir::currentPath(), "Chords ( *.png )");
+        this, ("Open Chords File"), QDir::currentPath());
     if (chordsPath_.isEmpty()) {
         return;
     }
 
     std::string chordsFile = chordsPath_.toStdString();
-    std::cout << chordsFile << std::endl;
+    std::cout << chordsFile  << " " << chordsFile.find('.') << std::endl;
+    auto totalTime = chordsFile.substr(chordsFile.find('.') - 4, 4);
+    auto totalTimeInt = std::atoi(totalTime.c_str());
+    const auto min = totalTimeInt / 100;
+    const auto second = (totalTimeInt- min * 100) % 60;
+    std::cout << "Total time: " << totalTime << " $$" << min << " ##" << second << std::endl;
 
-    openImage();
+    if (openImage()) {
+        if (pTimer != nullptr) {
+            pTimer->stop();
+            pTimer->start((min * 60 + second) * 1000 / pChordsImage_->height());
+            i_ = -200;
+        }
+    }
 }
 
-int PlayerMainWindow::openImage() {
+bool PlayerMainWindow::openImage() {
     if (pChordsImage_ != nullptr) {
         delete pChordsImage_;
         pChordsImage_ = nullptr;
         pChordsImage_ = new QImage(chordsPath_); 
-        std::cout << "load success! 111111111" << std::endl;
     } else {
         pChordsImage_ = new QImage(chordsPath_); 
-        std::cout << "load success! 222222222" << std::endl;
-        std::cout << "pChordsImage_->byteCount(): " << pChordsImage_->byteCount() << std::endl;
+        std::cout << "pChordsImage_->byteCount(): " << pChordsImage_->height() << std::endl;
         // return false;
     }
 
     QPixmap pixmap(QPixmap::fromImage(*pChordsImage_));
     // pixmap.scaled(QSize(ui->label->width(),ui->label->height()),Qt::KeepAspectRatioByExpanding);
-    ui->scrollAreaWidgetContents->setMinimumSize(QSize(400, 400));
+    // ui->scrollAreaWidgetContents->setMinimumSize(QSize(400, 400));
     ui->label->setPixmap(pixmap);
     ui->label->resize(pChordsImage_->width(),pChordsImage_->height());
-    ui->scrollArea->resize(pChordsImage_->width()+5, pChordsImage_->height()+5);
 
-    std::cout << "ui set success! 3333333" << std::endl;
+    ui->scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAsNeeded);
+    // ui->scrollArea->verticalScrollBar()->setValue(ui->scrollArea->verticalScrollBar()->maximum()/2);
+    // std::cout << "!!!!!" << ui->scrollArea->verticalScrollBar()->maximum() << std::endl;
 
     return true;
 }
