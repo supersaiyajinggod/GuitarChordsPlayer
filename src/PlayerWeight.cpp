@@ -14,7 +14,9 @@ PlayerMainWindow::PlayerMainWindow(QWidget *parent) : QMainWindow(parent), ui(ne
 
     connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(openFile()));
     connect(pTimer, &QTimer::timeout, [&](){
-        ui->scrollArea->verticalScrollBar()->setValue(++i_ > 0 ? i_ : 0);
+        if (!pause)
+            ui->scrollArea->verticalScrollBar()->setValue(++i_ > 0 ? i_ : 0);
+        // ui->scrollArea->verticalScrollBar()->setValue(!pause ? (i_ > 0 ? ++i_ : 0) : (i_ > 0 ? i_ : 0));
     });
 }
  
@@ -23,9 +25,19 @@ PlayerMainWindow::~PlayerMainWindow()
     delete ui;
 }
 
+void PlayerMainWindow::keyPressEvent(QKeyEvent * event) {
+    switch (event->key()) {
+        case Qt::Key_Space:
+            pause = !pause;
+            break;
+        default:
+            break;
+    }
+}
+
 void PlayerMainWindow::openFile() {
     chordsPath_ = QFileDialog::getOpenFileName(
-        this, ("Open Chords File"), QDir::currentPath());
+        this, ("Open Chords File"), QDir::currentPath()+"/../chords/");
     if (chordsPath_.isEmpty()) {
         return;
     }
@@ -67,6 +79,8 @@ bool PlayerMainWindow::openImage() {
     ui->scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAsNeeded);
     // ui->scrollArea->verticalScrollBar()->setValue(ui->scrollArea->verticalScrollBar()->maximum()/2);
     // std::cout << "!!!!!" << ui->scrollArea->verticalScrollBar()->maximum() << std::endl;
+
+    pause = false;
 
     return true;
 }

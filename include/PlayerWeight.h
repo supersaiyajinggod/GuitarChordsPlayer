@@ -7,6 +7,7 @@
 
 #include <QMainWindow>
 #include <QTimer>
+#include <QKeyEvent>
  
 namespace Ui {
     class MainWindow;
@@ -21,6 +22,8 @@ public:
     ~PlayerMainWindow();
  
 private:
+    void keyPressEvent(QKeyEvent * event);
+
     Ui::MainWindow *ui;
     QString chordsPath_;
     QImage * pChordsImage_ = nullptr;
@@ -29,6 +32,8 @@ private:
     bool openImage();
 
     int i_ = 0;
+    bool pause = false;
+    
  
 private slots:
     void openFile();
